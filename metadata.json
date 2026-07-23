@@ -1,0 +1,6 @@
+{
+  "name": "Username Generator",
+  "description": "A free SEO-optimized tool to instantly generate unique, realistic, and brandable usernames for social media and gaming platforms.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

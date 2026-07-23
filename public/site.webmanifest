@@ -1,0 +1,22 @@
+{
+  "name": "NameFuse",
+  "short_name": "NameFuse",
+  "description": "Generate unique usernames, brand names, business names, gamertags, and more for every platform.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
