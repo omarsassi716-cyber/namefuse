@@ -351,8 +351,8 @@ export function generateSEOPage(config: SEOPageConfig): SEOPageData {
     `100% free to use with instant clipboard copying and custom offline Favorites saving`
   ];
 
-  // 4. Generate long-form sections (3 full-length educational sections with 2 paragraphs each)
-  const sections = customSections || [
+  // 4. Generate long-form sections (4-6 full-length educational sections with 2 paragraphs each)
+  const sectionPool = [
     {
       title: `The Architecture of an Elite ${capitalizedKeyword} Name`,
       paragraphs: [
@@ -373,8 +373,33 @@ export function generateSEOPage(config: SEOPageConfig): SEOPageData {
         `Once our generator provides that spark of inspiration and you find a signature handle that perfectly fits your character, the absolute highest priority is to secure it across all major digital outlets. Maintaining identical usernames across YouTube, TikTok, and Instagram prevents copycat accounts from hijacking your traffic and makes it effortless for your audience to discover your entire portfolio.`,
         `Use our integrated platform check tools to instantly verify handle availability with a single tap. Save your top choices in your browser's offline Favorites folder, analyze their visual layouts, and lock in your new digital trademark before someone else does.`
       ]
+    },
+    {
+      title: `Linguistic Aesthetics & Phrasing Harmony`,
+      paragraphs: [
+        `The psychological impact of a username cannot be overstated. When ${aud[2] || aud[0]} encounter a clean, phonetic combination on ${platform}, they subliminally attribute authority, charm, or professional competence to the account owner. Utilizing ${adjs[3] || "custom"} sound rhythms ensures that the title is both audibly pleasing and visually symmetrical when rendered in profile headers.`,
+        `In addition, aligning the name's underlying theme with standard cultural memes or professional expectations increases immediate user retention. By blending active verbs such as '${verbs[2] || "discover"}' with relevant niche terms, you create a dynamic, multi-layered identity ready for modern digital platforms.`
+      ]
+    },
+    {
+      title: `Formatting Rules & Character Compliance`,
+      paragraphs: [
+        `Every social hub maintains rigid restrictions on username lengths and permitted special symbols. For example, ${platform} handles require strict compliance with length constraints and valid characters. Our procedurally generated templates are automatically customized to prevent annoying validation errors.`,
+        `We sanitize every single name to ensure proper lowercase styling, underscore replacement, or standard numbering presets. This means you can copy your favorite generated name directly and claim it on your target channel without worrying about compatibility.`
+      ]
+    },
+    {
+      title: `Maximizing Engagement for ${capitalizedKeyword}`,
+      paragraphs: [
+        `Ultimately, your name is the cornerstone of your brand discovery. For ${aud[3] || aud[0]} trying to navigate the crowded algorithms of ${ctx[1] || ctx[0]}, having a distinct, easy-to-type name increases direct searches and recommendation matches. A clear handle makes word-of-mouth promotion incredibly simple.`,
+        `By selecting the optimal preset and keyword filters, you can ensure that your personal or commercial profile ranks high in viewer memory and achieves maximum exposure. Claim your customized identity today and start scaling your digital footprint.`
+      ]
     }
   ];
+
+  // Pick between 4 and 6 sections deterministically based on seed
+  const numSections = 4 + Math.floor(rand() * 3); // generates 4, 5, or 6
+  const sections = customSections || sectionPool.slice(0, numSections);
 
   // 5. Generate unique FAQs
   const faqs = customFaqs || [
