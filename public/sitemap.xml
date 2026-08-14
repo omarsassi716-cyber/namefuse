@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://namefuse.vercel.app/sitemap_en.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://namefuse.vercel.app/sitemap_es.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://namefuse.vercel.app/sitemap_fr.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://namefuse.vercel.app/sitemap_de.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://namefuse.vercel.app/sitemap_ar.xml</loc>
+  </sitemap>
+</sitemapindex>

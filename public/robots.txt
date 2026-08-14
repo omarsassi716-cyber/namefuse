@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://namefuse.vercel.app/sitemap.xml
