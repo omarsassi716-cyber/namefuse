@@ -353,56 +353,59 @@ export function generateSEOPage(config: SEOPageConfig): SEOPageData {
 
   // Extract category based on the path
   let category = "usernames";
-  if (path.endsWith("usernames")) {
-    category = "usernames";
-  } else if (path.endsWith("names") && !path.endsWith("brand-names") && !path.endsWith("team-names") && !path.endsWith("creator-names") && !path.endsWith("startup-names") && !path.endsWith("ai-names")) {
-    category = "names";
-  } else if (path.endsWith("brand-names")) {
+  if (path.includes("instagram") || path.includes("social")) {
+    category = "instagram";
+  } else if (path.includes("tiktok")) {
+    category = "tiktok";
+  } else if (path.includes("discord")) {
+    category = "discord";
+  } else if (path.includes("couple")) {
+    category = "couples";
+  } else if (path.includes("brand") || path.includes("company")) {
     category = "brands";
-  } else if (path.endsWith("gamertags")) {
-    category = "gamertags";
-  } else if (path.endsWith("nicknames")) {
-    category = "nicknames";
-  } else if (path.endsWith("team-names")) {
-    category = "teams";
-  } else if (path.endsWith("creator-names")) {
-    category = "creators";
-  } else if (path.endsWith("startup-names")) {
+  } else if (path.includes("startup")) {
     category = "startups";
-  } else if (path.endsWith("ai-names")) {
+  } else if (path.includes("gaming") || path.includes("gamertag") || path.includes("fortnite") || path.includes("minecraft") || path.includes("valorant") || path.includes("roblox") || path.includes("cod") || path.includes("steam") || path.includes("xbox") || path.includes("playstation")) {
+    category = "gamertags";
+  } else if (path.includes("creator") || path.includes("youtube") || path.includes("twitch") || path.includes("podcast")) {
+    category = "creators";
+  } else if (path.includes("professional") || path.includes("business")) {
+    category = "professional";
+  } else if (path.includes("nickname") || path.includes("baby") || path.includes("pet")) {
+    category = "nicknames";
+  } else if (path.includes("team") || path.includes("clan") || path.includes("guild")) {
+    category = "teams";
+  } else if (path.includes("ai")) {
     category = "ai_naming";
-  } else if (path.endsWith("social-handles")) {
-    category = "social_handles";
   } else {
-    if (path.includes("username")) category = "usernames";
-    else if (path.includes("gamertag")) category = "gamertags";
-    else if (path.includes("brand")) category = "brands";
-    else if (path.includes("startup")) category = "startups";
-    else if (path.includes("team")) category = "teams";
-    else if (path.includes("nickname")) category = "nicknames";
-    else if (path.includes("creator")) category = "creators";
-    else if (path.includes("display-name") || path.includes("display-names")) category = "usernames";
+    if (path.endsWith("usernames")) category = "usernames";
+    else if (path.endsWith("names")) category = "names";
+    else category = "usernames";
   }
 
-  // 2. Generate Introduction (long, rich paragraph based on category)
+  // 2. Generate Introduction based on category
   let introduction = customIntroduction;
   if (!introduction) {
-    if (category === "brands" || category === "startups") {
-      introduction = `Launching a successful business or startup begins with securing a highly brandable, memorable, and trustworthy name. In today's digital economy, your brand name is your first customer touchpoint, directly influencing customer retention, market authority, and organic search positioning. Our specialized ${h1} combines premium, industry-aligned vocabulary with clean phonetic structures to help you discover elite, trademark-ready brand names with a single click. Say goodbye to cluttered, low-quality suggestions and unlock the pristine presence your commercial venture deserves.`;
+    if (category === "instagram") {
+      introduction = `Crafting a distinctive Instagram handle is essential for curating an aesthetic grid and building organic follower engagement. Your username acts as your primary visual headline, determining whether casual scrollers tap through to explore your profile. Our specialized ${h1} combines minimalist vocabulary, editorial styling, and balanced separators to help you secure clean, memorable handles that elevate your personal or creator presence.`;
+    } else if (category === "tiktok") {
+      introduction = `On TikTok's fast-paced For You Page, your handle must capture attention in milliseconds. Short, rhythmic, and punchy usernames increase memorability and make word-of-mouth growth effortless. Our specialized ${h1} generates viral-ready, high-tempo handle concepts designed specifically for short-form video creators, dancers, and trendsetters looking to stand out.`;
+    } else if (category === "discord") {
+      introduction = `A stellar Discord handle or server identity fosters instant community trust and makes voice-chat interactions smooth. Whether you are moderating a gaming community or hanging out in private channels, your display name should be easy to pronounce and visually clean. Our specialized ${h1} delivers approachable, community-friendly naming formulas optimized for modern chat platforms.`;
+    } else if (category === "couples") {
+      introduction = `Matching couple handles and joint profiles celebrate shared journeys across social media and gaming worlds. Crafting balanced complementary names requires a delicate touch to maintain individual identity while establishing a cohesive aesthetic. Our specialized ${h1} curates romantic, harmonious, and stylish dual naming concepts tailored for duos and best friends.`;
+    } else if (category === "brands" || category === "startups") {
+      introduction = `Launching a successful business or startup begins with securing a highly brandable, memorable, and trustworthy name. In today's digital economy, your brand name is your first customer touchpoint, directly influencing customer retention, market authority, and organic search positioning. Our specialized ${h1} combines premium, industry-aligned vocabulary with clean phonetic structures to help you discover elite, trademark-ready brand names with a single click.`;
     } else if (category === "gamertags") {
-      introduction = `In the fast-paced multiplayer gaming arena, your gamertag is your shield, your banner, and your digital reputation. Whether you are leading a tactical squad, climbing the competitive ranks, or building immersive virtual worlds, a strong name commands respect and builds instant camaraderie. Our specialized ${h1} produces aggressive, competitive, and esports-ready aliases optimized for killfeeds, Twitch streaming overlays, and server leaderboards. Say goodbye to number-stuffed suggestions and claim your elite moniker.`;
-    } else if (category === "usernames" || category === "social_handles") {
-      introduction = `A memorable social media username is the cornerstone of your personal brand and online identity. In a visual-first digital ecosystem, your handle is the primary headline of your profile grid, directly impacting follower discoverability, click-through rates, and trust. Our specialized ${h1} combines beautiful aesthetic prefixes with sleek rhythmic suffixes to generate platform-compliant usernames designed to stand out in active comment threads and discovery feeds. Claim the pristine presence you deserve.`;
-    } else if (category === "nicknames" || category === "names") {
-      introduction = `Choosing the perfect nickname or character name is a deeply creative process, whether you are worldbuilding a fantasy novel, roleplaying in community forums, or selecting an endearing moniker for a loved one. A great name carries emotional warmth, poetic cadence, and memorable imagery. Our specialized ${h1} blends soft, beautiful, and historical naming roots to deliver unique, pleasant-sounding ideas tailored to your characters, gaming avatars, or friend groups.`;
-    } else if (category === "teams") {
-      introduction = `A powerful team or clan name is the ultimate anchor of group unity, competitive pride, and team spirit. Whether you are forming a professional esports organization, a local sports club, or a raid syndicate in an MMO, your banner needs to look formidable and sound cohesive on the leaderboard. Our specialized ${h1} provides professional, high-energy, and legendary team name formulas designed for tournament brackets and league registers.`;
+      introduction = `In multiplayer gaming lobbies, your gamertag is your digital shield and competitive signature. A great alias commands respect, looks pristine in killfeeds, and sounds formidable on voice comms. Our specialized ${h1} produces competitive, esports-ready aliases tailored for modern console and PC networks, eliminating messy number strings.`;
     } else if (category === "creators") {
-      introduction = `For streamers, vloggers, and content creators, a memorable display handle is the foundation of high-retention personal branding. As an online creator, your channel title directly affects search engine indexation, viewer click-through rates, and long-term brand equity across platforms. Our specialized ${h1} generates professional, clean, and catchy naming concepts designed to build trust and capture audience attention instantly.`;
+      introduction = `For streamers, vloggers, and independent creators, a memorable channel title is the foundation of long-term brand equity. Your display name directly influences search indexation and viewer trust across YouTube, Twitch, and podcast directories. Our specialized ${h1} generates clean, high-retention creator names designed to capture attention instantly.`;
+    } else if (category === "professional") {
+      introduction = `Establishing professional credibility requires an executive digital identity that communicates authority and precision. Whether optimizing your LinkedIn profile or launching a consulting practice, a clean handle builds instant trust with clients and peers. Our specialized ${h1} delivers distinguished corporate naming concepts.`;
     } else if (category === "ai_naming") {
-      introduction = `Naming artificial intelligence systems, bots, or virtual assistants requires a forward-looking, clean, and highly innovative vocabulary. Whether you are launching a SaaS automation tool, a community moderator bot, or a smart neural model, the name should convey competence, futuristic vision, and clean digital efficiency. Our specialized ${h1} produces sleek, cybernetic, and high-tech name concepts tailored for modern agents.`;
+      introduction = `Naming artificial intelligence models, bots, and automation tools requires forward-thinking vocabulary that communicates intelligence and efficiency. Our specialized ${h1} produces sleek, cybernetic, and high-tech naming concepts tailored for modern agents and SaaS apps.`;
     } else {
-      introduction = `In the modern digital landscape, establishing a highly polished identity is the ultimate competitive advantage. Whether you are building an empire, designing a professional profile, or setting up a casual moniker to connect with friends, your name acts as the primary visual anchor of your reputation. Our specialized ${h1} utilizes advanced linguistic flow matrices to elevate your brand, seamlessly combining premium styles and structured elements to output 50+ rare, highly brandable, and pleasant-sounding ideas.`;
+      introduction = `Establishing a polished digital identity is the ultimate competitive advantage. Our specialized ${h1} utilizes advanced linguistic flow matrices to elevate your brand, combining premium styles to output unique, highly brandable naming concepts.`;
     }
   }
 
@@ -428,11 +431,20 @@ export function generateSEOPage(config: SEOPageConfig): SEOPageData {
     const userPrefixes = ["velvet", "haze", "lunar", "cosmic", "minimal", "quiet", "classic", "poetic", "moody", "vivid", "amber", "ethereal", "dreamy", "vintage", "rustic", "urban", "polar", "indigo", "mellow", "neon"];
     const userSuffixes = ["studio", "space", "journal", "archive", "essence", "drift", "wave", "vibe", "lens", "mind", "cloud", "bloom", "gaze", "shade", "haven", "notes", "poetry", "flora", "dusk", "aura"];
 
+    const tiktokPrefixes = ["viral", "hype", "zenith", "vibe", "pulse", "echo", "nova", "flux", "dash", "bolt", "swift", "slick", "apex", "neon", "pixel", "breeze", "chill", "glow", "spark", "orbit"];
+    const tiktokSuffixes = ["feed", "tok", "clip", "vibe", "loop", "trend", "wave", "sync", "flow", "hub", "zone", "cast", "spot", "media", "stage", "play", "mix", "beat", "craft", "snap"];
+
+    const discordPrefixes = ["chill", "cozy", "epic", "lunar", "stellar", "quantum", "neon", "mystic", "solar", "retro", "cosmic", "breezy", "velvet", "frost", "silent", "shadow", "wander", "echo", "nova", "pulse"];
+    const discordSuffixes = ["lounge", "haven", "sanctuary", "hub", "vault", "realm", "base", "core", "nexus", "den", "bay", "dock", "port", "nook", "nest", "guild", "clan", "crew", "squad", "parlor"];
+
+    const couplePrefixes = ["matching", "dual", "twin", "sweet", "harmony", "destiny", "bonded", "loyal", "cozy", "true", "infinite", "co", "joint", "paired", "ever", "side", "two", "sync", "sweet", "dear"];
+    const coupleSuffixes = ["duo", "pair", "bond", "synergy", "canvas", "harmony", "couple", "anchor", "orbit", "echo", "pulse", "flow", "wave", "spark", "bloom", "dawn", "dusk", "star", "moon", "sun"];
+
+    const proPrefixes = ["elite", "prime", "apex", "strategic", "global", "executive", "trusted", "certified", "master", "pioneer", "vision", "nexus", "core", "catalyst", "vertex", "summit", "beacon", "horizon", "axiom", "meridian"];
+    const proSuffixes = ["consulting", "partners", "solutions", "group", "advisors", "associates", "strategies", "ventures", "capital", "firm", "guild", "network", "hub", "experts", "corps", "alliance", "services", "labs", "systems", "trust"];
+
     const nickPrefixes = ["Tiny", "Cozy", "Sweet", "Soft", "Honey", "Little", "Baby", "Sunny", "Peachy", "Dewy", "Cuddle", "Pip", "Chippy", "Dolly", "Fuzzy", "Panda", "Silly", "Wiggle", "Bubbles", "Lucky"];
     const nickSuffixes = ["Bean", "Sprout", "Peach", "Button", "Blossom", "Bear", "Cloud", "Berry", "Sparkle", "Chime", "Bug", "Plum", "Bunny", "Clover", "Poppy", "Honey", "Puff", "Bake", "Waffle", "Noodle"];
-
-    const teamPrefixes = ["United", "Apex", "Vanguard", "Elite", "Tactical", "Rogue", "Valor", "Legacy", "Synergy", "Alpha", "Omega", "Infinity", "Horizon", "Ascent", "Dynasty", "Nexus", "Summit", "Alliance", "Prime", "Iron"];
-    const teamSuffixes = ["Alliance", "Syndicate", "Legion", "Squad", "Brigade", "Force", "Collective", "Vanguard", "Apex", "Patrol", "Club", "Guild", "Synergy", "Faction", "Roster", "Regiment", "Unit", "Rangers", "Knights", "Outlaws"];
 
     const creatorPrefixes = ["Creative", "Tech", "Lifestyle", "Vibe", "Review", "Stream", "Explore", "Unfiltered", "Cozy", "Daily", "Aero", "Vivid", "Focus", "Vision", "Vocal", "Beyond", "Pure", "Rare", "Social", "True"];
     const creatorSuffixes = ["Channel", "HQ", "Lab", "Media", "Studio", "Lounge", "Diaries", "Vlog", "Central", "Hub", "Show", "Zone", "Network", "Cast", "Chronicles", "Pulse", "Lab", "Digest", "Collective", "Vibe"];
@@ -443,7 +455,19 @@ export function generateSEOPage(config: SEOPageConfig): SEOPageData {
     let pList = userPrefixes;
     let sList = userSuffixes;
 
-    if (cat === "brands" || cat === "startups") {
+    if (cat === "instagram") {
+      pList = userPrefixes;
+      sList = userSuffixes;
+    } else if (cat === "tiktok") {
+      pList = tiktokPrefixes;
+      sList = tiktokSuffixes;
+    } else if (cat === "discord") {
+      pList = discordPrefixes;
+      sList = discordSuffixes;
+    } else if (cat === "couples") {
+      pList = couplePrefixes;
+      sList = coupleSuffixes;
+    } else if (cat === "brands" || cat === "startups") {
       pList = brandPrefixes;
       sList = brandSuffixes;
     } else if (cat === "gamertags" || cat === "teams") {
@@ -455,19 +479,19 @@ export function generateSEOPage(config: SEOPageConfig): SEOPageData {
     } else if (cat === "creators") {
       pList = creatorPrefixes;
       sList = creatorSuffixes;
+    } else if (cat === "professional") {
+      pList = proPrefixes;
+      sList = proSuffixes;
     } else if (cat === "ai_naming") {
       pList = aiPrefixes;
       sList = aiSuffixes;
-    } else if (cat === "social_handles") {
-      pList = userPrefixes;
-      sList = userSuffixes;
     }
 
     const seen = new Set<string>();
     while (examples.length < 10) {
       const pref = pList[Math.floor(subRand() * pList.length)];
       const suff = sList[Math.floor(subRand() * sList.length)];
-      const comb = cat === "social_handles" || cat === "usernames" ? `${pref}_${suff}`.toLowerCase() : `${pref} ${suff}`;
+      const comb = cat === "instagram" || cat === "tiktok" || cat === "discord" ? `${pref}_${suff}`.toLowerCase() : `${pref} ${suff}`;
       if (!seen.has(comb)) {
         seen.add(comb);
         examples.push(comb);
@@ -476,12 +500,116 @@ export function generateSEOPage(config: SEOPageConfig): SEOPageData {
     return examples;
   };
 
-  // 4. Generate long-form sections (4-6 full-length educational sections with 2 paragraphs each)
+  // 4. Generate structured sections with practical checklists and example analysis
   let sections = customSections;
   if (!sections) {
     const examplesList = getCuratedExamples(category);
     
-    if (category === "brands" || category === "startups") {
+    if (category === "instagram") {
+      sections = [
+        {
+          title: `Strategic Principles for Instagram Handle Design`,
+          paragraphs: [
+            `When users visit your Instagram profile, your handle is the first element they process. A strong Instagram handle should be concise, visually balanced, and reflective of your grid's niche. Utilizing clean separators like a period or underscore (e.g., 'lunar.studio') helps establish a professional editorial aesthetic.`,
+            `Avoid stringing together unrelated words or appending birth years, which can clutter your profile header. Instead, focus on evocative nouns and atmospheric modifiers that tell visitors what your content represents before they even scroll down your feed.`
+          ]
+        },
+        {
+          title: `Practical Decision Framework: Before Choosing This Name, Verify`,
+          paragraphs: [
+            `• Readability & Typing Ease: Is the handle effortless to type on mobile keyboards without accidental autocorrect errors?`,
+            `• Pronunciation Test: Can followers easily say your handle aloud when recommending your account to others?`,
+            `• Privacy Safeguard: Does the username avoid revealing sensitive personal information such as full names, birth years, or locations?`,
+            `• Cross-Platform Alignment: Is the handle available or consistent across your backup social channels?`
+          ]
+        },
+        {
+          title: `Curated ${capitalizedKeyword} Examples & Analysis`,
+          paragraphs: [
+            `To help guide your brainstorming process, here are 10 custom-generated handle concepts created by our engine, along with a breakdown of their stylistic strengths and ideal use cases:`,
+            `1. ${examplesList[0]} (Ideal for minimalist aesthetic feeds; offers high visual symmetry) | 2. ${examplesList[1]} (Great for creative portfolios; clean editorial tone) | 3. ${examplesList[2]} (Evocative and memorable; fits lifestyle curators) | 4. ${examplesList[3]} (Punchy rhythm; easy to recall) | 5. ${examplesList[4]} (Professional tone; excellent for brand presence) | 6. ${examplesList[5]} (Subtle and refined; perfect for quiet luxury grids) | 7. ${examplesList[6]} (Modern and crisp; strong mobile legibility) | 8. ${examplesList[7]} (Artistic cadence; captures attention instantly) | 9. ${examplesList[8]} (Balanced spacing; avoids clutter) | 10. ${examplesList[9]} (Classic formatting; timeless appeal). Potential drawback: Common words may require minor contextual suffixes if exact matches are claimed.`
+          ]
+        }
+      ];
+    } else if (category === "tiktok") {
+      sections = [
+        {
+          title: `Optimizing Usernames for TikTok's For You Page (FYP)`,
+          paragraphs: [
+            `On TikTok, rapid discoverability is everything. Short, high-tempo usernames with sharp consonant endings perform exceptionally well because viewers scan handles in split seconds while browsing vertical video loops.`,
+            `Avoid overly complex spelling variations or silent letters that hinder word-of-mouth promotion. Keeping your handle tightly aligned with your specific content niche (such as dance, comedy, or tech reviews) helps the platform algorithm categorize your account faster.`
+          ]
+        },
+        {
+          title: `Practical Decision Framework: Before Choosing This Name, Verify`,
+          paragraphs: [
+            `• Hook Compatibility: Does the username sound catchy when spoken in video introductions or sign-offs?`,
+            `• Character Length: Is it short enough to fit cleanly on overlay watermarks and live stream chat tags?`,
+            `• Niche Clarity: Does it give viewers an instant hint about your content category?`,
+            `• Avoid Trends That Age Poorly: Does it steer clear of fleeting internet slang that might feel dated in six months?`
+          ]
+        },
+        {
+          title: `Curated ${capitalizedKeyword} Examples & Analysis`,
+          paragraphs: [
+            `Explore 10 viral-ready handle concepts generated by our engine, designed for high-impact short-form creators:`,
+            `1. ${examplesList[0]} (High-tempo rhythm; excellent for fast-paced video loops) | 2. ${examplesList[1]} (Catchy and memorable; stands out in comment sections) | 3. ${examplesList[2]} (Sleek modern cadence; ideal for trendsetters) | 4. ${examplesList[3]} (Energetic tone; fits vloggers and creators) | 5. ${examplesList[4]} (Clean formatting; strong visual retention) | 6. ${examplesList[5]} (Sharp consonants; memorable sound) | 7. ${examplesList[6]} (Dynamic feel; great for interactive content) | 8. ${examplesList[7]} (Polished style; builds instant creator trust) | 9. ${examplesList[8]} (Crisp structure; easy to read on mobile screens) | 10. ${examplesList[9]} (Distinctive presence; reduces audience confusion). Potential drawback: High-energy terms work best for entertainment/lifestyle rather than formal corporate accounts.`
+          ]
+        }
+      ];
+    } else if (category === "discord") {
+      sections = [
+        {
+          title: `Building Community Trust in Discord Servers`,
+          paragraphs: [
+            `Discord communities thrive on approachable, friendly, and easy-to-pronounce handles. Whether you are running a gaming guild, an art club, or a study lounge, your display name should encourage friendly interaction and active voice-chat participation.`,
+            `With Discord's modern handle system, choosing a clean, unblemished username without messy special characters ensures members can tag you effortlessly during discussions and moderation queues.`
+          ]
+        },
+        {
+          title: `Practical Decision Framework: Before Choosing This Name, Verify`,
+          paragraphs: [
+            `• Voice Comms Pronunciation: Can fellow gamers easily pronounce your handle during high-intensity voice matches?`,
+            `• Server Role Compatibility: Does the name look clean alongside custom server roles and nitro badges?`,
+            `• Friendly Tone: Does it convey an approachable, welcoming vibe suited for community spaces?`,
+            `• Uniqueness: Is it distinct enough to avoid confusion with other active members in large servers?`
+          ]
+        },
+        {
+          title: `Curated ${capitalizedKeyword} Examples & Analysis`,
+          paragraphs: [
+            `Discover 10 community-friendly handle concepts tailored for chat lounges and gaming servers:`,
+            `1. ${examplesList[0]} (Approachable and chill; perfect for community lounges) | 2. ${examplesList[1]} (Cozy cadence; great for friendly hangouts) | 3. ${examplesList[2]} (Epic gaming tone; fits cooperative guilds) | 4. ${examplesList[3]} (Stellar imagery; visually appealing in member lists) | 5. ${examplesList[4]} (Clean formatting; easy to ping in chat) | 6. ${examplesList[5]} (Mystic undertones; great for fantasy roleplay) | 7. ${examplesList[6]} (Retro vibe; adds personality to profile cards) | 8. ${examplesList[7]} (Smooth phonetics; effortless to say aloud) | 9. ${examplesList[8]} (Balanced structure; works in any server) | 10. ${examplesList[9]} (Distinctive tag; memorable across communities). Potential drawback: Relaxed casual names may need slight adjustments if used for formal business networking.`
+          ]
+        }
+      ];
+    } else if (category === "couples") {
+      sections = [
+        {
+          title: `The Art of Coordinated Naming for Duos`,
+          paragraphs: [
+            `Matching couple usernames and joint profiles celebrate shared bonds across social media and gaming ecosystems. Creating harmonious dual names requires balancing coordination with individual identity so that each handle stands strong on its own while forming a unified pair.`,
+            `When designing matching names, consider complementary themes (such as celestial pairs, nature opposites, or rhythmic phonetic echoes) rather than identical text strings, ensuring a sophisticated and artistic aesthetic.`
+          ]
+        },
+        {
+          title: `Practical Decision Framework: Before Choosing This Name, Verify`,
+          paragraphs: [
+            `• Balanced Coordination: Do both handles share a similar length, font style, and thematic weight?`,
+            `• Privacy Preservation: Do the names avoid displaying full real names or intimate personal dates?`,
+            `• Timeless Appeal: Will the dual naming structure remain graceful and stylish over the years?`,
+            `• Individual Clarity: Can each partner use their handle comfortably on separate solo platforms?`
+          ]
+        },
+        {
+          title: `Curated ${capitalizedKeyword} Examples & Analysis`,
+          paragraphs: [
+            `Explore 10 harmonious dual naming concepts designed for couples, best friends, and gaming partners:`,
+            `1. ${examplesList[0]} (Balanced dual synergy; excellent for matching profiles) | 2. ${examplesList[1]} (Poetic coupling; subtle and romantic) | 3. ${examplesList[2]} (Co-op gaming favorite; great for duo matches) | 4. ${examplesList[3]} (Harmonious cadence; visually stunning together) | 5. ${examplesList[4]} (Sweet aesthetic; perfect for photo journals) | 6. ${examplesList[5]} (Classic pairing; timeless appeal) | 7. ${examplesList[6]} (Modern match; clean formatting) | 8. ${examplesList[7]} (Complementary tones; sophisticated style) | 9. ${examplesList[8]} (Shared theme; effortless recognition) | 10. ${examplesList[9]} (Artistic duo tag; elegant and memorable). Potential drawback: Matching sets require both users to maintain active accounts to preserve the paired aesthetic.`
+          ]
+        }
+      ];
+    } else if (category === "brands" || category === "startups") {
       sections = [
         {
           title: `The Core Principles of Brand Nomenclature`,
@@ -491,17 +619,19 @@ export function generateSEOPage(config: SEOPageConfig): SEOPageData {
           ]
         },
         {
-          title: `Domain Strategy & Multi-Platform Cohesion`,
+          title: `Practical Decision Framework: Before Choosing This Name, Verify`,
           paragraphs: [
-            `Securing your digital brand requires a proactive domain portfolio strategy. In addition to claiming your primary .com domain, it is essential to lock in identical usernames across LinkedIn, Twitter, and major online directories. Consistency prevents bad actors from hijacking your brand traffic and allows customers to discover your services effortlessly.`,
-            `Use our built-in availability shortcuts to verify your name ideas across global registries. By pairing your keyword with professional suffixes like 'Labs', 'HQ', 'Holdings', or 'Studio', you can discover high-value, available domains that preserve a clean, uncluttered brand identity.`
+            `• Trademark Clearance: Is the name free from existing registrations in your commercial class?`,
+            `• Pronunciation Test: Can international clients pronounce the name effortlessly without spelling confusion?`,
+            `• Expansion Flexibility: Does the name allow your business to expand into new product lines in the future?`,
+            `• Domain Availability: Can you secure a clean .com, .io, or industry-specific domain without awkward hyphens?`
           ]
         },
         {
-          title: `10 Curated ${capitalizedKeyword} Examples & Creative Inspiration`,
+          title: `Curated ${capitalizedKeyword} Examples & Analysis`,
           paragraphs: [
-            `To help jumpstart your brainstorming session, here are 10 highly brandable, professional name combinations generated by our seed-engine. These ideas showcase optimal syllables balance and industry-aligned naming structures:`,
-            `1. ${examplesList[0]} | 2. ${examplesList[1]} | 3. ${examplesList[2]} | 4. ${examplesList[3]} | 5. ${examplesList[4]} | 6. ${examplesList[5]} | 7. ${examplesList[6]} | 8. ${examplesList[7]} | 9. ${examplesList[8]} | 10. ${examplesList[9]}`
+            `To help jumpstart your brainstorming session, here are 10 highly brandable, professional name combinations generated by our seed-engine, complete with strategic analysis:`,
+            `1. ${examplesList[0]} (High-growth tech appeal; excellent for SaaS ventures) | 2. ${examplesList[1]} (Executive tone; strong corporate presence) | 3. ${examplesList[2]} (Modern agency feel; clean market positioning) | 4. ${examplesList[3]} (Innovative cadence; captures investor attention) | 5. ${examplesList[4]} (Scalable structure; flexible for multi-product expansion) | 6. ${examplesList[5]} (Prestigious naming root; premium market feel) | 7. ${examplesList[6]} (Crisp phonetics; high mobile app store legibility) | 8. ${examplesList[7]} (Authoritative vocabulary; builds instant B2B trust) | 9. ${examplesList[8]} (Abstract neologism; simplifies trademark defense) | 10. ${examplesList[9]} (Classic enterprise tone; enduring commercial value). Potential drawback: Distinctive brand names require active marketing investment to establish immediate consumer awareness.`
           ]
         }
       ];
@@ -515,89 +645,19 @@ export function generateSEOPage(config: SEOPageConfig): SEOPageData {
           ]
         },
         {
-          title: `Console Restrictions and Character Limits`,
+          title: `Practical Decision Framework: Before Choosing This Name, Verify`,
           paragraphs: [
-            `Every gaming ecosystem maintains strict rules regarding character counts and symbols. For instance, Xbox Live and PlayStation Network restrict online IDs to 12-16 characters, while platforms like Roblox support up to 20. Ensuring proper alignment with these guidelines prevents annoying registration errors during account setup.`,
-            `Our procedural gaming generator is automatically calibrated to enforce these exact platform boundaries. Whether you are generating tags for Discord, Steam, or console networks, our names are sanitized to guarantee smooth, error-free claiming.`
+            `• Killfeed Visibility: Is the gamertag short and clean enough to be read instantly in fast-moving killfeeds?`,
+            `• Console Limits: Does it comply with strict character length limits (12-16 characters) on PlayStation and Xbox networks?`,
+            `• Voice Comms Clarity: Can your squadmates call out your name quickly during intense clutch moments?`,
+            `• Number-Free Identity: Does it avoid relying on clumsy birth years or random digits?`
           ]
         },
         {
-          title: `10 Curated ${capitalizedKeyword} Examples & Creative Inspiration`,
+          title: `Curated ${capitalizedKeyword} Examples & Analysis`,
           paragraphs: [
-            `Looking for a spark of inspiration? Here are 10 competitive, high-cadence gamertag ideas generated specifically for this platform style. They demonstrate ideal syllable pacing and visual impact:`,
-            `1. ${examplesList[0]} | 2. ${examplesList[1]} | 3. ${examplesList[2]} | 4. ${examplesList[3]} | 5. ${examplesList[4]} | 6. ${examplesList[5]} | 7. ${examplesList[6]} | 8. ${examplesList[7]} | 9. ${examplesList[8]} | 10. ${examplesList[9]}`
-          ]
-        }
-      ];
-    } else if (category === "usernames" || category === "social_handles") {
-      sections = [
-        {
-          title: `Social Media Branding: The Mononym Advantage`,
-          paragraphs: [
-            `Establishing a highly polished presence on Instagram, TikTok, or YouTube requires a username that is both memorable and easy to search. The most successful creators utilize a mononym or a highly structured double-word name that functions as a personal brand. Your handle acts as the visual headline of your page, so keeping it clean and readable is a major priority.`,
-            `Avoid repeating letters or adding excessive underscores, which confuse voice search algorithms and look unprofessional. A singular balanced dot or underscore between two clean words (e.g., 'haze.studio') is the industry standard for high-end creators and aesthetic grids.`
-          ]
-        },
-        {
-          title: `Cross-Platform Handle Synchronization`,
-          paragraphs: [
-            `As your digital footprint expands, maintaining identical handles across YouTube, TikTok, Pinterest, and Twitter is critical to lock in your brand equity. A unified handle allows your audience to transition seamlessly between your video content, photo galleries, and personal updates without losing track of your profile.`,
-            `If your exact desired name is already taken, do not resort to adding random strings of numbers. Instead, try adding clean, contextual tags. For design or photography pages, append '.lens', '.raw', or '.studio'. Personal accounts can use '.space', '.journal', or '.co' for an elegant finish.`
-          ]
-        },
-        {
-          title: `10 Curated ${capitalizedKeyword} Examples & Creative Inspiration`,
-          paragraphs: [
-            `Need some creative ideas? Below are 10 highly aesthetic, unblemished username combinations generated by our engine. They use clean word-boundaries and modern style prefixes:`,
-            `1. ${examplesList[0]} | 2. ${examplesList[1]} | 3. ${examplesList[2]} | 4. ${examplesList[3]} | 5. ${examplesList[4]} | 6. ${examplesList[5]} | 7. ${examplesList[6]} | 8. ${examplesList[7]} | 9. ${examplesList[8]} | 10. ${examplesList[9]}`
-          ]
-        }
-      ];
-    } else if (category === "nicknames" || category === "names") {
-      sections = [
-        {
-          title: `The Linguistics of Affectionate Nicknames`,
-          paragraphs: [
-            `A great nickname should feel warm, friendly, and deeply personal. Unlike formal usernames, nicknames thrive on soft phonetic doubling (like 'Coco' or 'Lulu') and sweet, nature-inspired terms that build instant connection. Choosing a nickname is about capturing a charming trait, a shared memory, or a gentle atmosphere.`,
-            `Phonetic warmth plays a key role in name recognition. Consonants like M, N, L, and soft vowels create a soothing, comforting cadence when spoken aloud, which is why names like 'Mimi' or 'Bean' feel so endearing.`
-          ]
-        },
-        {
-          title: `Baby and Pet Naming Strategies`,
-          paragraphs: [
-            `Naming the next generation or a new four-legged companion requires blending classic roots with a touch of modern uniqueness. For children, forward-thinking parents are increasingly considering future digital availability, checking domain names alongside traditional registries. For pets, choosing a short, punchy name with sharp phonetic endings (like 'Cookie' or 'Ranger') ensures high auditory recognition.`,
-            `Our generator curates gentle, creative, and family-friendly ideas that are perfect for personalized baby blankets, pet collars, and nursery room cards alike.`
-          ]
-        },
-        {
-          title: `10 Curated ${capitalizedKeyword} Examples & Creative Inspiration`,
-          paragraphs: [
-            `Discover a world of cozy, sweet, and unique naming options. Here are 10 custom-generated nickname examples showing off beautiful cadence and warmth:`,
-            `1. ${examplesList[0]} | 2. ${examplesList[1]} | 3. ${examplesList[2]} | 4. ${examplesList[3]} | 5. ${examplesList[4]} | 6. ${examplesList[5]} | 7. ${examplesList[6]} | 8. ${examplesList[7]} | 9. ${examplesList[8]} | 10. ${examplesList[9]}`
-          ]
-        }
-      ];
-    } else if (category === "teams") {
-      sections = [
-        {
-          title: `Formulating a Legendary Team or Clan Banner`,
-          paragraphs: [
-            `A powerful team name represents the collective ambition, tactical synergy, and competitive drive of its members. Whether you are launching a tournament-ready esports organization, a local soccer club, or a co-op gaming syndicate, your team name must command respect and foster high morale. The most effective team names combine unified, heroic terminology with aggressive or futuristic modifiers.`,
-            `Avoid generic clichés that make your squad blend into the background. Instead, choose names that hint at tactical precision, historical alliances, or unstoppable force, creating a memorable brand for leagues and community leaderboards.`
-          ]
-        },
-        {
-          title: `Branding for Esports and Tournaments`,
-          paragraphs: [
-            `When competing in high-profile leagues, your name is featured on tournament brackets, stream broadcast overlays, and team banners. Choosing a cohesive, balanced title ensures that shoutcasters can announce your name easily and fans can identify your logo instantly. Keeping the main name to a single, high-impact word paired with a team suffix (like 'Syndicate', 'Vanguard', or 'Legion') is a proven esports strategy.`,
-            `Use our team name generator to explore diverse, high-energy formulations tailored specifically to your competitive niche, complete with instant clipboard shortcuts.`
-          ]
-        },
-        {
-          title: `10 Curated ${capitalizedKeyword} Examples & Creative Inspiration`,
-          paragraphs: [
-            `Unify your roster under an epic banner. Here are 10 custom-generated team names designed to sound professional and formidable:`,
-            `1. ${examplesList[0]} | 2. ${examplesList[1]} | 3. ${examplesList[2]} | 4. ${examplesList[3]} | 5. ${examplesList[4]} | 6. ${examplesList[5]} | 7. ${examplesList[6]} | 8. ${examplesList[7]} | 9. ${examplesList[8]} | 10. ${examplesList[9]}`
+            `Looking for a spark of inspiration? Here are 10 competitive, high-cadence gamertag ideas generated specifically for this platform style:`,
+            `1. ${examplesList[0]} (Aggressive competitive tone; elite killfeed presence) | 2. ${examplesList[1]} (Sharp syllable pacing; excellent for tactical FPS) | 3. ${examplesList[2]} (Intimidating aura; commands respect in lobbies) | 4. ${examplesList[3]} (Clean alphanumeric structure; zero clutter) | 5. ${examplesList[4]} (Esports-ready cadence; tournament verified style) | 6. ${examplesList[5]} (Stealthy aesthetic; perfect for flankers and scouts) | 7. ${examplesList[6]} (High-velocity feel; great for movement shooters) | 8. ${examplesList[7]} (Authoritative ring; strong squad leader vibe) | 9. ${examplesList[8]} (Crisp and memorable; easy for shoutcasters to announce) | 10. ${examplesList[9]} (Legendary persona; stands out on leaderboards). Potential drawback: Aggressive tactical tags may need softening if you transition to casual party games.`
           ]
         }
       ];
@@ -611,41 +671,45 @@ export function generateSEOPage(config: SEOPageConfig): SEOPageData {
           ]
         },
         {
-          title: `Optimizing Your Handle for Search Algorithms`,
+          title: `Practical Decision Framework: Before Choosing This Name, Verify`,
           paragraphs: [
-            `Including a broad niche keyword (like 'Tech', 'Finance', 'Kitchen', or 'Designs') in your channel display name helps search algorithms index your content and place your videos in relevant recommendation grids. Combine your keyword with professional prefixes or high-retention suffixes (like 'HQ', 'Lab', 'Media', or 'Channel') to build an instant authoritative presence.`,
-            `Use our specialized creator name generator to explore beautiful, search-intent-focused ideas that comply with platform limits and preserve professional styling.`
+            `• Search Indexation: Does the display name include a clear keyword or niche identifier for search algorithms?`,
+            `• Word-of-Mouth Test: Can viewers spell your channel name correctly just by hearing it spoken in a video?`,
+            `• Cross-Platform Handle: Is the associated @handle available across all major video and social networks?`,
+            `• Long-Term Niche Flexibility: Does the name allow you to pivot into new content topics without feeling restrictive?`
           ]
         },
         {
-          title: `10 Curated ${capitalizedKeyword} Examples & Creative Inspiration`,
+          title: `Curated ${capitalizedKeyword} Examples & Analysis`,
           paragraphs: [
-            `Build your digital audience on a rock-solid foundation. Here are 10 highly clickable, clickable channel name concepts:`,
-            `1. ${examplesList[0]} | 2. ${examplesList[1]} | 3. ${examplesList[2]} | 4. ${examplesList[3]} | 5. ${examplesList[4]} | 6. ${examplesList[5]} | 7. ${examplesList[6]} | 8. ${examplesList[7]} | 9. ${examplesList[8]} | 10. ${examplesList[9]}`
+            `Build your digital audience on a rock-solid foundation. Here are 10 highly clickable channel name concepts:`,
+            `1. ${examplesList[0]} (High-retention structure; ideal for video creators) | 2. ${examplesList[1]} (Professional studio vibe; great for educational content) | 3. ${examplesList[2]} (Catchy rhythm; increases subscriber recall) | 4. ${examplesList[3]} (Search-optimized format; easy to discover) | 5. ${examplesList[4]} (Clean formatting; builds instant channel authority) | 6. ${examplesList[5]} (Engaging tone; perfect for lifestyle vloggers) | 7. ${examplesList[6]} (Crisp phrasing; stands out in recommended sidebars) | 8. ${examplesList[7]} (Authoritative title; excellent for tech reviewers) | 9. ${examplesList[8]} (Memorable cadence; fosters loyal community growth) | 10. ${examplesList[9]} (Polished creator brand; timeless appeal). Potential drawback: Broad titles require strong thumbnail branding to differentiate your content.`
           ]
         }
       ];
-    } else if (category === "ai_naming") {
+    } else if (category === "professional") {
       sections = [
         {
-          title: `The Cybernetic Aesthetic: Naming AI and Agents`,
+          title: `Executive Presence & Corporate Identity Standards`,
           paragraphs: [
-            `Naming an AI assistant, autonomous agent, or smart automation model requires a futuristic, clean, and highly innovative vocabulary. The ideal AI name is short, tech-focused, and communicates intelligence and capability. In today's software economy, your AI's name represents the personality of your service, directly influencing customer comfort and trust.`,
-            `Avoid overly complex technical labels that feel cold or intimidating. Instead, opt for friendly, cybernetic compound terms or sleek, short mononyms that sound like competent digital companions.`
+            `In professional networking and corporate consulting, your digital handle acts as your virtual business card. An executive digital presence demands dignity, clarity, and precision, ensuring potential employers, clients, and partners perceive your expertise immediately.`,
+            `Avoid informal slang, numbers, or unverified acronyms in professional profiles. Maintaining a clean, standardized format (such as first-name dot last-name or recognized industry terms) establishes immediate trustworthiness.`
           ]
         },
         {
-          title: `Branding for SaaS and Automation Tools`,
+          title: `Practical Decision Framework: Before Choosing This Name, Verify`,
           paragraphs: [
-            `For AI-driven SaaS companies and automated developer tools, having a name with a strong .io or .ai domain is critical. Your name should look incredible on pitch deck slides, mobile app store grids, and developer forums, conveying seamless operational efficiency and modern architecture.`,
-            `Our specialized AI generator curates high-end tech prefixes with automated, futuristic suffixes, ensuring your software brand looks like a market-leading intelligence suite.`
+            `• Executive Tone: Does the name convey competence, seriousness, and reliability?`,
+            `• LinkedIn Optimization: Is it fully compatible with professional networking search algorithms?`,
+            `• Email Domain Harmony: Can you easily provision a matching corporate email address?`,
+            `• Absence of Slang: Is the handle entirely free from casual internet jargon or informal memes?`
           ]
         },
         {
-          title: `10 Curated ${capitalizedKeyword} Examples & Creative Inspiration`,
+          title: `Curated ${capitalizedKeyword} Examples & Analysis`,
           paragraphs: [
-            `Discover sleek, modern names for your neural models or digital assistants. Here are 10 high-tech concepts generated by our engine:`,
-            `1. ${examplesList[0]} | 2. ${examplesList[1]} | 3. ${examplesList[2]} | 4. ${examplesList[3]} | 5. ${examplesList[4]} | 6. ${examplesList[5]} | 7. ${examplesList[6]} | 8. ${examplesList[7]} | 9. ${examplesList[8]} | 10. ${examplesList[9]}`
+            `Explore 10 distinguished professional naming concepts tailored for consultants, executives, and enterprise builders:`,
+            `1. ${examplesList[0]} (Executive consulting tone; high B2B credibility) | 2. ${examplesList[1]} (Strategic advisory feel; trusted industry presence) | 3. ${examplesList[2]} (Corporate authority; excellent for LinkedIn profiles) | 4. ${examplesList[3]} (Prestigious structure; establishes expert status) | 5. ${examplesList[4]} (Clean professional formatting; spotless reputation) | 6. ${examplesList[5]} (Enterprise-ready cadence; premium market standing) | 7. ${examplesList[6]} (Authoritative phrasing; inspires client confidence) | 8. ${examplesList[7]} (Global leadership tone; ideal for senior operators) | 9. ${examplesList[8]} (Refined business identity; enduring career value) | 10. ${examplesList[9]} (Distinguished moniker; elite professional polish). Potential drawback: Highly formal names may feel less suited for relaxed creative arts.`
           ]
         }
       ];
@@ -659,128 +723,233 @@ export function generateSEOPage(config: SEOPageConfig): SEOPageData {
           ]
         },
         {
-          title: `Strategic Styling for ${platform} Profiles`,
+          title: `Practical Decision Framework: Before Choosing This Name, Verify`,
           paragraphs: [
-            `Every social sphere, from gaming lobbies to executive networks, operates on unique cultural signals. Knowing your target audience is key; if your content caters to visual curators, choosing a moniker rich in soft natural elements and aesthetic tones builds instant warmth and approachability.`,
-            `To optimize your search, input your favorite custom keyword in our utility bar, select the '${style}' configuration, and observe how our procedural system dynamically wraps your term in elite prefixes and high-retention suffixes.`
+            `• Visual Symmetry: Does the name look balanced and clean when written out?`,
+            `• Pronunciation Clarity: Is it spoken easily without tongue-twisting syllables?`,
+            `• Platform Suitability: Does it fit within the character limits of your target network?`,
+            `• Timeless Design: Does it avoid short-lived internet trends that may feel outdated soon?`
           ]
         },
         {
-          title: `10 Curated ${capitalizedKeyword} Examples & Creative Inspiration`,
+          title: `Curated ${capitalizedKeyword} Examples & Analysis`,
           paragraphs: [
             `Looking for a spark of inspiration? Below are 10 unique, custom-generated name combinations using clean formatting and optimal syllables:`,
-            `1. ${examplesList[0]} | 2. ${examplesList[1]} | 3. ${examplesList[2]} | 4. ${examplesList[3]} | 5. ${examplesList[4]} | 6. ${examplesList[5]} | 7. ${examplesList[6]} | 8. ${examplesList[7]} | 9. ${examplesList[8]} | 10. ${examplesList[9]}`
+            `1. ${examplesList[0]} (High visual symmetry; excellent mobile legibility) | 2. ${examplesList[1]} (Clean editorial cadence; professional tone) | 3. ${examplesList[2]} (Evocative imagery; strong audience recall) | 4. ${examplesList[3]} (Punchy structure; memorable and crisp) | 5. ${examplesList[4]} (Balanced word-spacing; avoids clutter) | 6. ${examplesList[5]} (Sophisticated tone; refined aesthetic) | 7. ${examplesList[6]} (Modern styling; crisp digital presence) | 8. ${examplesList[7]} (Artistic flow; captures attention instantly) | 9. ${examplesList[8]} (Classic formatting; timeless appeal) | 10. ${examplesList[9]} (Distinctive moniker; stands out cleanly). Potential drawback: Universal names may require minor tweaks to secure exact handle matches.`
           ]
         }
       ];
     }
   }
 
-  // 5. Generate unique FAQs
+  // 5. Generate unique category-specific FAQs (expanded to 5 genuinely useful questions)
   let faqs = customFaqs;
   if (!faqs) {
-    if (category === "brands" || category === "startups") {
+    if (category === "instagram") {
       faqs = [
         {
-          question: `How do I check if a brand name is already trademarked?`,
-          answer: `We highly recommend searching the official database of your local trademark office (such as the USPTO in the United States or EUIPO in Europe) before launching. You can also use our built-in links to check domain name availability instantly.`
+          question: `How can I handle an Instagram username that is already taken?`,
+          answer: `If your exact name is taken, avoid adding random numbers or strings. Instead, append professional contextual markers like '.studio', '.journal', or '.space' to maintain a clean, high-end profile identity.`
+        },
+        {
+          question: `How often can I change my Instagram username?`,
+          answer: `Instagram allows you to change your username once every 14 days. However, frequent changes can temporarily disrupt follower recognition and search lookup consistency.`
+        },
+        {
+          question: `Should personal and business Instagram handles follow different rules?`,
+          answer: `Yes. Personal handles can lean toward creative mononyms or aesthetic pseudonyms, while business handles should prioritize clarity, brand matching, and immediate industry recognition.`
+        },
+        {
+          question: `Are generated handles guaranteed to be available on Instagram?`,
+          answer: `No. NameFuse generates creative naming concepts for inspiration only. You must manually verify availability directly within the Instagram app or registration page.`
+        },
+        {
+          question: `Do special characters affect handle readability?`,
+          answer: `Excessive symbols or complex punctuation can make handles harder to share verbally or remember. Clean alphanumeric formatting with minimal separators generally offers the best readability.`
+        }
+      ];
+    } else if (category === "tiktok") {
+      faqs = [
+        {
+          question: `What is the maximum character length for TikTok usernames?`,
+          answer: `TikTok usernames can be up to 24 characters long. Shorter handles (under 15 characters) are generally easier for viewers to remember and type into search bars.`
+        },
+        {
+          question: `Can I include emojis or special symbols in my TikTok handle?`,
+          answer: `TikTok allows letters, numbers, underscores, and periods in usernames. Avoiding complex or unusual symbols makes your profile easier to find in cross-platform promotions.`
+        },
+        {
+          question: `Does my TikTok handle impact how viewers find my content?`,
+          answer: `While the platform relies on complex engagement and content signals, having a clean, relevant handle helps viewers instantly understand your content focus when they visit your profile.`
+        },
+        {
+          question: `Are generated TikTok handles guaranteed to be unregistered?`,
+          answer: `No. NameFuse provides creative ideas for brainstorming purposes. Always check current availability directly on TikTok before committing to branding materials.`
+        },
+        {
+          question: `Should I match my TikTok handle with other social networks?`,
+          answer: `Consistency across platforms helps your community recognize you easily when they follow your links from other sites or share your content across networks.`
+        }
+      ];
+    } else if (category === "discord") {
+      faqs = [
+        {
+          question: `How do Discord handles work with the modern system?`,
+          answer: `Discord utilizes unique lowercase alphanumeric handles (e.g., @username) without discriminators, making it simple for friends to add you and ping you in active chat channels.`
+        },
+        {
+          question: `Can I use spaces in my Discord display name?`,
+          answer: `Yes! While your unique @handle cannot contain spaces, your server display name can include spaces, emojis, and custom styling tailored to each community.`
+        },
+        {
+          question: `What makes a good Discord server name?`,
+          answer: `A great Discord server name should be short, welcoming, and reflective of your community's core interest, whether that is gaming, anime, or collaborative art.`
+        },
+        {
+          question: `Are these names guaranteed to be open on Discord?`,
+          answer: `No. Because millions of users are active on Discord, you must verify availability in your user settings before assuming a handle is open.`
+        },
+        {
+          question: `How do I maintain consistency across multiple servers?`,
+          answer: `Using a consistent base display name or nickname across servers helps community members recognize you instantly during voice and text interactions.`
+        }
+      ];
+    } else if (category === "couples") {
+      faqs = [
+        {
+          question: `How do we coordinate matching handles without looking identical?`,
+          answer: `You can use complementary prefixes/suffixes or shared design elements (such as matching aesthetic emojis or matching typography) while keeping the main words distinct.`
+        },
+        {
+          question: `Is it safe to include anniversary dates in couple usernames?`,
+          answer: `We generally advise against including exact dates or full names for privacy reasons. Choosing atmospheric or poetic matching words is much safer and more stylish.`
+        },
+        {
+          question: `Can matching handles be used across different gaming networks?`,
+          answer: `Yes! Dual naming looks incredible in co-op gaming lobbies, Discord servers, and shared social profiles.`
+        },
+        {
+          question: `Do matching names require both partners to use them simultaneously?`,
+          answer: `While paired handles look best when both partners display them together, each handle is structured to remain readable and attractive on its own.`
+        },
+        {
+          question: `Are these coupled suggestions checked for platform availability?`,
+          answer: `No. Availability varies widely across platforms, so you will need to check your preferred networks manually.`
+        }
+      ];
+    } else if (category === "brands" || category === "startups") {
+      faqs = [
+        {
+          question: `Does NameFuse perform legal trademark clearance or registration?`,
+          answer: `No. NameFuse is an educational brainstorming resource only. We do not perform legal trademark searches, clearance, or legal guarantees. Always consult a qualified trademark attorney before commercial use.`
+        },
+        {
+          question: `How should I check domain name availability for a generated brand name?`,
+          answer: `You can use popular domain registrars or our quick lookup links to check whether matching .com, .io, or other domain extensions are currently available for purchase.`
         },
         {
           question: `What is a 'brandable' business name?`,
-          answer: `A brandable business name avoids generic descriptive words and instead blends rhythmic sounds, sleek syllables, and memorable industry terminology (like 'Labs' or 'Studio') to create a premium, stand-out brand identity.`
+          answer: `A brandable business name avoids generic descriptive words and instead blends rhythmic sounds, sleek syllables, and memorable industry terminology (like 'Labs' or 'Studio') to create a premium brand identity.`
         },
         {
-          question: `Can I use these generated names commercially?`,
-          answer: `Yes, all suggested names are 100% free to use. However, doing a comprehensive trademark check is always recommended to avoid local corporate overlaps.`
+          question: `Can I use these generated names commercially without risk?`,
+          answer: `Because business naming involves complex prior registrations and regional trademark laws, you must conduct a thorough trademark search in your relevant jurisdiction before commercial launch.`
+        },
+        {
+          question: `Are these name ideas certified or verified by branding experts?`,
+          answer: `No. These suggestions are produced by procedural linguistic algorithms designed for inspiration and brainstorming rather than formal professional certification.`
         }
       ];
     } else if (category === "gamertags") {
       faqs = [
         {
-          question: `What are the character limits for modern consoles?`,
-          answer: `Xbox Live and PlayStation Network both restrict usernames to 12-16 characters. Roblox supports up to 20 characters. Our generator is pre-programmed to enforce these limits so your tags are ready to claim.`
+          question: `What are the character limits for modern gaming consoles?`,
+          answer: `Some gaming platforms impose character limits and formatting rules on usernames or gamertags. Check the current requirements of the specific platform before choosing a final name.`
         },
         {
           question: `Why should I avoid special symbols in my gamertag?`,
-          answer: `Symbols like exclamation points or brackets often fail to render correctly in fast-paced lobbies or killfeeds, sometimes showing up as broken boxes. Clean alphanumeric names look elite and are much easier for shoutcasters to read.`
+          answer: `Symbols and rare unicode characters can fail to render correctly in fast-paced lobbies or killfeeds, sometimes appearing as broken characters. Clean alphanumeric names are universally supported.`
         },
         {
-          question: `Can I use these names on Steam or Discord?`,
-          answer: `Yes! These names are fully compatible with Steam, Discord, Xbox, PlayStation, and all other major digital gaming networks.`
-        }
-      ];
-    } else if (category === "usernames" || category === "social_handles") {
-      faqs = [
-        {
-          question: `How can I secure a unique social handle if my desired name is taken?`,
-          answer: `Try appending a clean contextual prefix or suffix rather than adding cluttered numbers. Excellent additions for visual creators include '.lens', '.raw', or '.studio', while personal pages look elegant with '.space' or '.journal'.`
+          question: `Can I use these gamertags across Steam, Xbox, and PlayStation?`,
+          answer: `Yes! These names are formatted to be compatible across major gaming networks, though availability on each specific network must be verified individually.`
         },
         {
-          question: `Is it better to have the same handle across all platforms?`,
-          answer: `Yes! Having a unified username across Instagram, TikTok, YouTube, and Twitter makes it simple for your audience to discover your entire portfolio, preventing copycats and building consistent brand equity.`
+          question: `Are generated gamertags verified for availability?`,
+          answer: `No. You must verify whether a gamertag is open directly within your console or game launcher network.`
         },
         {
-          question: `How often can I change my social media handle?`,
-          answer: `Most platforms like Instagram and TikTok allow username changes once every 14 days. This gives you flexibility to experiment, but consistency is recommended to maintain indexation.`
-        }
-      ];
-    } else if (category === "nicknames" || category === "names") {
-      faqs = [
-        {
-          question: `What makes a nickname sound warm and friendly?`,
-          answer: `Affectionate nicknames often utilize soft double-syllables (like 'Lulu' or 'Coco') and natural, comforting nouns (like 'Bean', 'Sprout', or 'Cloud') which are phonetically pleasing and easy to say.`
-        },
-        {
-          question: `Can I use these names for fantasy worldbuilding?`,
-          answer: `Absolutely! Our naming database is rich in historical, poetic, and vintage roots, making it an excellent resource for roleplay campaigns, character sheets, and creative literature.`
-        },
-        {
-          question: `Are these names suitable for pet naming?`,
-          answer: `Yes! The soft phonetics and punchy syllable breaks are perfect for dogs, cats, or other animal companions to easily recognize.`
-        }
-      ];
-    } else if (category === "teams") {
-      faqs = [
-        {
-          question: `How long should a professional esports team name be?`,
-          answer: `A professional team name should be concise—ideally one or two words. Many elite organizations pair a distinct team word with a structural suffix like 'Syndicate', 'Vanguard', or 'Esports'.`
-        },
-        {
-          question: `Does this team name generator support gaming clans?`,
-          answer: `Yes! It produces aggressive, tactical, and legendary team and clan names perfectly formatted for competitive lobbies and league directories.`
+          question: `Does a short gamertag provide any competitive advantage?`,
+          answer: `Shorter gamertags are generally easier for teammates to communicate quickly during voice chat and easier for opponents to read in crowded killfeeds.`
         }
       ];
     } else if (category === "creators") {
       faqs = [
         {
           question: `Should my channel display name be different from my handle?`,
-          answer: `Yes, your channel display name can include spaces and capitalization (e.g. 'Cozy Reviews'), while your unique @handle must be lowercase, continuous, and platform-compliant.`
+          answer: `Yes, your channel display name can include spaces and capitalization (e.g., 'Creative Reviews'), while your unique @handle must be lowercase, continuous, and platform-compliant.`
         },
         {
-          question: `How often can I change my YouTube name or handle?`,
-          answer: `YouTube allows name and handle changes twice within a 14-day window. However, frequent changes confuse existing subscribers and can impact search ranking consistency.`
+          question: `How often can I change my channel name or handle?`,
+          answer: `Platforms like YouTube and Twitch permit occasional changes, but frequent renaming can temporarily disrupt subscriber recognition and channel search lookup.`
+        },
+        {
+          question: `How do I choose a creator name that scales over time?`,
+          answer: `Avoid hyper-specific niche terms if you plan to expand your content topics later. Choose a flexible, brandable handle that accommodates future content growth.`
+        },
+        {
+          question: `Are creator name suggestions guaranteed to be unregistered?`,
+          answer: `No. You must check availability directly on YouTube, Twitch, TikTok, or other target platforms before building your brand around a generated idea.`
+        },
+        {
+          question: `Do these channel names guarantee higher viewer retention?`,
+          answer: `No. Viewer retention depends entirely on the quality of your video content and audience engagement; names simply help establish initial clarity and memorability.`
         }
       ];
-    } else if (category === "ai_naming") {
+    } else if (category === "professional") {
       faqs = [
         {
-          question: `What are some modern suffix options for AI bot names?`,
-          answer: `Futuristic and highly professional suffix choices include 'Agent', 'Bot', 'Engine', 'Node', 'Core', 'Flow', and 'Model', which convey high intelligence and automated efficiency.`
+          question: `How should I format my professional LinkedIn URL and handle?`,
+          answer: `Keep your professional handle as close to your actual professional name as possible (e.g., first-name dot last-name), avoiding informal abbreviations or nicknames.`
         },
         {
-          question: `Is this suitable for SaaS company products?`,
-          answer: `Yes, our AI name generator focuses on clean, cybernetic, and premium corporate titles that are perfect for software applications, developer tools, and automation suites.`
+          question: `Why is consistency important across professional networks?`,
+          answer: `Consistency across LinkedIn, corporate email, and professional portfolios helps prospective clients, recruiters, and colleagues find and recognize you effortlessly.`
+        },
+        {
+          question: `Can I use stylized fonts in professional handles?`,
+          answer: `It is best to avoid stylized unicode fonts on professional profiles, as they can interfere with applicant tracking systems (ATS) and screen readers.`
+        },
+        {
+          question: `Are these professional naming suggestions certified?`,
+          answer: `No. These are educational suggestions designed to help structure professional online identities.`
+        },
+        {
+          question: `Do professional handles impact search placement on LinkedIn?`,
+          answer: `Using your true professional name or recognized industry terminology can support clarity in profile lookups, though search ranking is determined by many platform factors.`
         }
       ];
     } else {
       faqs = [
         {
           question: `What makes a great ${platform.toLowerCase()} name?`,
-          answer: `An exceptional name is brief (usually under 15 characters), easy to pronounce, and uses ${adjs[0]} syllables. It should avoid random numbers or excessive symbols, which often look low-quality and reduce searchability.`
+          answer: `An exceptional name is brief (usually under 15 characters), easy to pronounce, and uses clean syllables without random numbers or confusing symbols.`
         },
         {
-          question: `How does the ${capitalizedKeyword} Generator ensure unique outputs?`,
-          answer: `Our tool uses a complex, procedural database that merges thousands of curated vocabulary roots, thematic adjectives, and platform-compliant suffixes to ensure every search yields a completely fresh array of suggestions.`
+          question: `How does the ${capitalizedKeyword} Generator create suggestions?`,
+          answer: `Our tool uses a procedural algorithm that combines curated vocabulary roots and platform-compliant suffixes to help spark creative inspiration.`
+        },
+        {
+          question: `Are generated names guaranteed to be available?`,
+          answer: `No. Users must independently verify availability on their chosen platforms.`
+        },
+        {
+          question: `Is NameFuse free to use?`,
+          answer: `Yes, generating naming ideas and saving favorites is completely free.`
+        },
+        {
+          question: `Can I use these suggestions for commercial projects?`,
+          answer: `Yes, for inspiration, though you should verify trademark and domain availability before commercial launch.`
         }
       ];
     }
