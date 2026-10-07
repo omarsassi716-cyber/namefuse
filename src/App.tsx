@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense } from "react";
 import { LazyMotion, domAnimation, motion, AnimatePresence } from "motion/react";
-import { seoPages } from "./seoData";
+import { seoPages, CURATED_PILLAR_PATHS } from "./seoData";
 import { generateUsernames, generateDisplayNames } from "./generatorEngine";
 import { tools, getToolForPath } from "./toolsConfig";
 import { getLocalizedSEOContent, uiTranslations } from "./translations";
@@ -17,10 +17,10 @@ const RelatedDashboard = lazy(() => import("./components/RelatedDashboard"));
 const AdSensePlaceholder = lazy(() => import("./components/AdSensePlaceholder"));
 const ConsentBanner = lazy(() => import("./components/ConsentBanner"));
 
-import { 
-  trackGeneratorStarted, 
-  trackNameGenerated, 
-  trackResultFavorited, 
+import {
+  trackGeneratorStarted,
+  trackNameGenerated,
+  trackResultFavorited,
   trackRegenerateClicked,
   trackRelatedGeneratorClicked,
   trackRelatedArticleClicked
@@ -211,7 +211,7 @@ export default function App() {
   const handleLocationChange = React.useCallback(() => {
     const { lang, cleanPath } = parsePath(window.location.pathname);
     setLanguage(lang);
-    
+
     const isUtility = ["/privacy-policy", "/terms-of-service", "/contact", "/about-us"].includes(cleanPath);
     const isBlog = cleanPath === "/blog" || cleanPath.startsWith("/blog/");
     const isHub = [
@@ -232,7 +232,7 @@ export default function App() {
       const pageData = seoPages[cleanPath];
       const platform = pageData.platform;
       const style = pageData.defaultStyle;
-      
+
       setSelectedPlatform(tool.platforms.includes(platform) ? platform : tool.defaultPlatform);
       setSelectedStyle(tool.styles.includes(style) ? style : tool.defaultStyle);
     } else {
@@ -276,11 +276,11 @@ export default function App() {
   const navigateTo = useCallback((path: string) => {
     const { lang, cleanPath } = parsePath(path);
     setLanguage(lang);
-    
+
     const targetPath = lang === "en" ? cleanPath : `/${lang}${cleanPath}`;
     window.history.pushState(null, "", targetPath);
     setCurrentPath(cleanPath);
-    
+
     const isUtility = ["/privacy-policy", "/terms-of-service", "/contact", "/about-us"].includes(cleanPath);
     const isBlog = cleanPath === "/blog" || cleanPath.startsWith("/blog/");
     const isHub = [
@@ -296,17 +296,17 @@ export default function App() {
       if (pageData) {
         const platform = tool.platforms.includes(pageData.platform) ? pageData.platform : tool.defaultPlatform;
         const style = tool.styles.includes(pageData.defaultStyle) ? pageData.defaultStyle : tool.defaultStyle;
-        
+
         setSelectedPlatform(platform);
         setSelectedStyle(style);
-        
+
         const names = tool.id === "display-name"
           ? generateDisplayNames(keyword, platform, style, 50)
           : generateUsernames(keyword, platform, style, 50);
         setGeneratedNames(names);
       }
     }
-    
+
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [keyword]);
 
@@ -325,12 +325,12 @@ export default function App() {
         filters: getFiltersObject()
       })
     });
-    
+
     if (!response.ok) {
       const errData = await response.json();
       throw new Error(errData.error || "Failed to generate names from Gemini AI.");
     }
-    
+
     const data = await response.json();
     if (data.names && Array.isArray(data.names) && data.names.length > 0) {
       return data.names;
@@ -350,7 +350,7 @@ export default function App() {
       style: selectedStyle,
       keyword_present: !!keyword.trim(),
     });
-    
+
     if (isAiMode) {
       try {
         const names = await fetchAiNames(keyword, selectedPlatform, selectedStyle, 50);
@@ -389,7 +389,7 @@ export default function App() {
         style: selectedStyle,
         count: names.length,
       });
-      
+
       const resultsSection = document.getElementById("results-anchor");
       if (resultsSection) {
         resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -406,7 +406,7 @@ export default function App() {
       generator_type: activeTool.id,
       platform: selectedPlatform,
     });
-    
+
     if (isAiMode) {
       try {
         const names = await fetchAiNames(keyword, selectedPlatform, selectedStyle, 50);
@@ -447,7 +447,7 @@ export default function App() {
   const handleLoadMore = async () => {
     setIsGenerating(true);
     setAiError(null);
-    
+
     if (isAiMode) {
       try {
         const additionalNames = await fetchAiNames(keyword, selectedPlatform, selectedStyle, 50);
@@ -542,7 +542,7 @@ export default function App() {
   const pageData = useMemo(() => {
     if (isUtilityPage || isHubPage) return null;
     const basePage = seoPages[currentPath] || seoPages["/username-generator"];
-    
+
     // Retrieve translated configurations
     const localized = getLocalizedSEOContent(basePage.platform, basePage.platform, basePage.defaultStyle, language);
     if (localized) {
@@ -655,6 +655,24 @@ export default function App() {
     document.title = title || "NameFuse | Free Username Generator";
 
     // Update Meta Description
+    // Update Robots Meta Tag
+    let robotsTag = document.querySelector("meta[name=robots]");
+    if (!robotsTag) {
+      robotsTag = document.createElement("meta");
+      robotsTag.setAttribute("name", "robots");
+      document.head.appendChild(robotsTag);
+    }
+    const isCuratedPage = CURATED_PILLAR_PATHS.includes(currentPath) ||
+                          currentPath === "" ||
+                          isUtilityPage ||
+                          isHubPage ||
+                          isBlogPage;
+    if (isCuratedPage) {
+      robotsTag.setAttribute("content", "index, follow");
+    } else {
+      robotsTag.setAttribute("content", "noindex, follow");
+    }
+
     let metaDescTag = document.querySelector("meta[name='description']");
     if (!metaDescTag) {
       metaDescTag = document.createElement("meta");
@@ -907,7 +925,7 @@ export default function App() {
       </div>
     }>
     <div className={`min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-300 ${isRtl ? "rtl" : "ltr"}`}>
-      
+
       {/* Header component */}
       <Header
         currentPath={currentPath}
@@ -921,7 +939,7 @@ export default function App() {
       />
 
       <main id="main-content" className="relative pb-24">
-        
+
         {/* Top Ad banner placeholder */}
         <div className="container mx-auto px-4 pt-20 pb-4">
           <AdSensePlaceholder type="top-banner" />
@@ -962,7 +980,7 @@ export default function App() {
               <section id="generator-interface" className="max-w-4xl mx-auto px-4 sm:px-6 pb-16 relative z-10">
                 <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-xl shadow-black/5 dark:shadow-black/20 backdrop-blur-md">
                   <form onSubmit={handleGenerate} className="space-y-6">
-                    
+
                     {/* Step Row 1: Configurations Grid */}
                     <div className="space-y-3">
                       <div className="flex items-center gap-2 mb-1">
@@ -971,7 +989,7 @@ export default function App() {
                           Choose Platform &amp; Style
                         </h2>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Configuration Platform select */}
                         <div className="space-y-2 text-left">
@@ -1017,7 +1035,7 @@ export default function App() {
                           Enter Seed Keywords &amp; Launch
                         </h2>
                       </div>
-                      
+
                       <div className="flex flex-col sm:flex-row gap-3">
                         <div className="relative flex-1">
                           <input
@@ -1120,7 +1138,7 @@ export default function App() {
                           className="overflow-hidden border-t border-zinc-150 dark:border-zinc-800/80 pt-4 space-y-4"
                         >
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
-                            
+
                             {/* Length constraints slider */}
                             <div className="space-y-3 p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/50 dark:border-zinc-850/50">
                               <span className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1">
@@ -1246,7 +1264,7 @@ export default function App() {
                     </AnimatePresence>
 
                   </form>
-                  
+
                   {/* Trust Disclaimer Notice */}
                   <div className="mt-5 pt-4 border-t border-zinc-100 dark:border-zinc-800/60 text-center">
                     <p className="text-[11px] text-zinc-400 dark:text-zinc-500 leading-relaxed max-w-2xl mx-auto">
@@ -1293,10 +1311,10 @@ export default function App() {
 
               {/* Google Search Style "People Also Ask" Section */}
               <Suspense fallback={<div className="h-24 flex items-center justify-center text-zinc-400 dark:text-zinc-600">Loading Related Questions...</div>}>
-                <PeopleAlsoAsk 
-                  platform={pageData.platform} 
-                  language={language} 
-                  onNavigate={navigateTo} 
+                <PeopleAlsoAsk
+                  platform={pageData.platform}
+                  language={language}
+                  onNavigate={navigateTo}
                 />
               </Suspense>
 
@@ -1339,9 +1357,9 @@ export default function App() {
       {/* Beautiful Footer */}
       <footer id="app-footer" className="border-t border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-950/60 pt-16 pb-8 text-zinc-500 text-xs sm:text-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8">
-            
+
             {/* Brand column */}
             <div className="space-y-4 text-left sm:col-span-2 md:col-span-1">
               <div className="flex items-center gap-2">
@@ -1515,7 +1533,7 @@ export default function App() {
                 </li>
               </ul>
             </div>
-            
+
           </div>
 
           <div className="border-t border-zinc-200 dark:border-zinc-900/80 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-zinc-500 dark:text-zinc-600 text-xs">

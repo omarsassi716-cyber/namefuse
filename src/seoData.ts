@@ -1,13 +1,4 @@
-import { seoGroup1Configs } from "./seoGroup1";
-import { seoGroup2Configs } from "./seoGroup2";
-import { seoGroup3Configs } from "./seoGroup3";
-import { seoGroup4Configs } from "./seoGroup4";
-import { seoGroup5Configs } from "./seoGroup5";
-import { seoGroup6Configs } from "./seoGroup6";
-import { seoLongTailConfigs } from "./seoLongTail";
-
 import { generateSEOPage } from "./seoGeneratorHelper";
-import { getProgrammaticExtraConfigs } from "./seoProgrammaticExtra";
 
 export interface SEOPageData {
   path: string;
@@ -489,25 +480,12 @@ const coreConfigs: SEOPageConfig[] = [
   }
 ];
 
+export const CURATED_PILLAR_PATHS = coreConfigs.map(c => c.path);
+
 import { tools } from "./toolsConfig";
 
-const staticConfigs: SEOPageConfig[] = [
-  ...coreConfigs,
-  ...seoGroup1Configs,
-  ...seoGroup2Configs,
-  ...seoGroup3Configs,
-  ...seoGroup4Configs,
-  ...seoGroup5Configs,
-  ...seoGroup6Configs,
-  ...seoLongTailConfigs
-];
-
-const staticPaths = new Set(staticConfigs.map(c => c.path));
-const extraConfigs = getProgrammaticExtraConfigs(staticPaths);
-
 const allConfigs: SEOPageConfig[] = [
-  ...staticConfigs,
-  ...extraConfigs
+  ...coreConfigs
 ];
 
 const elegantTitleModifiers = [

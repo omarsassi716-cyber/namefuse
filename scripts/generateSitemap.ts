@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { seoPages } from "../src/seoData";
+import { seoPages, CURATED_PILLAR_PATHS } from "../src/seoData";
 import { blogArticles } from "../src/blogData";
 
 const DOMAIN = "https://namefuse.vercel.app";
@@ -8,8 +8,8 @@ const LANGUAGES = ["en", "es", "fr", "de", "ar"];
 
 function getLocalizedPath(p: string, lang: string) {
   if (lang === "en") return p === "" ? "/" : p;
-  const base = p === "" ? "/username-generator" : p;
-  return `/${lang}${base}`;
+  if (p === "") return `/${lang}`;
+  return `/${lang}${p}`;
 }
 
 async function generateSitemap() {
@@ -24,7 +24,7 @@ async function generateSitemap() {
     "/blog"
   ];
 
-  const dynamicPaths = Object.keys(seoPages);
+  const dynamicPaths = CURATED_PILLAR_PATHS;
   
   // Add all blog article paths
   const blogPaths = blogArticles.map((post) => `/blog/${post.slug}`);

@@ -849,8 +849,8 @@ function compileArticlesList(): BlogPost[] {
     }
   }
 
-  // Ensure precisely 400 articles
-  return articles.slice(0, 400);
+  // Ensure precisely 80 cornerstone articles
+  return articles.slice(0, 80);
 }
 
 export const blogArticles = compileArticlesList();

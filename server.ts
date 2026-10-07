@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import compression from "compression";
 import { GoogleGenAI, Type } from "@google/genai";
-import { seoPages } from "./src/seoData";
+import { seoPages, CURATED_PILLAR_PATHS } from "./src/seoData";
 import { tools } from "./src/toolsConfig";
 import { BLOG_CATEGORIES, BLOG_AUTHORS, getArticleBySlug } from "./src/blogData";
 import { getLocalizedSEOContent } from "./src/translations";
@@ -202,6 +202,88 @@ Sitemap: ${protocol}://${host}/sitemap.xml`);
       res.status(404).send("OG Image not found");
     }
   });
+
+  const REDIRECT_MAP: Record<string, string> = {
+    "/instagram-handle-generator": "/instagram-username-generator",
+    "/tiktok-handle-generator": "/tiktok-username-generator",
+    "/gamer-tag-generator": "/gaming-username-generator",
+    "/youtube-handle-generator": "/youtube-name-generator",
+    "/discord-name-generator": "/gaming-username-generator",
+    "/roblox-username-generator": "/gaming-username-generator",
+    "/aesthetic-username-generator": "/aesthetic-display-names",
+    "/funny-username-generator": "/funny-display-names",
+    "/cool-username-generator": "/cool-display-names",
+    "/business-name-generator": "/professional-display-names",
+    "/aesthetic-gamer-tag-generator": "/gaming-username-generator",
+    "/cool-discord-names-generator": "/gaming-username-generator",
+    "/retro-instagram-handle-generator": "/instagram-username-generator",
+    "/cyberpunk-clan-name-generator": "/gaming-username-generator",
+    "/minimalist-tiktok-username-generator": "/tiktok-username-generator",
+    "/aesthetic-instagram-names": "/instagram-username-generator",
+    "/cute-tiktok-handles": "/tiktok-username-generator",
+    "/badass-gamer-tags": "/gaming-username-generator",
+    "/epic-gaming-names": "/gaming-username-generator",
+    "/creative-youtube-names": "/youtube-name-generator"
+  };
+
+  const getRedirectTarget = (urlPath: string): string | null => {
+    let matchedPath = urlPath.split("?")[0];
+    if (matchedPath.endsWith("/") && matchedPath.length > 1) {
+      matchedPath = matchedPath.slice(0, -1);
+    }
+    let langPrefix = "";
+    let pathWithoutLang = matchedPath;
+    const pathParts = matchedPath.split("/").filter(Boolean);
+    if (pathParts.length > 0 && ["es", "fr", "de", "ar"].includes(pathParts[0])) {
+      langPrefix = "/" + pathParts[0];
+      pathWithoutLang = "/" + pathParts.slice(1).join("/");
+    }
+    const target = REDIRECT_MAP[pathWithoutLang];
+    if (target) {
+      return `${langPrefix}${target}`;
+    }
+    return null;
+  };
+
+  const isValidRoute = (urlPath: string): boolean => {
+    let matchedPath = urlPath.split("?")[0];
+    if (matchedPath.endsWith("/") && matchedPath.length > 1) {
+      matchedPath = matchedPath.slice(0, -1);
+    }
+    let pathWithoutLang = matchedPath;
+    const pathParts = matchedPath.split("/").filter(Boolean);
+    if (pathParts.length > 0 && ["es", "fr", "de", "ar"].includes(pathParts[0])) {
+      pathWithoutLang = "/" + pathParts.slice(1).join("/");
+    }
+    if (pathWithoutLang === "" || pathWithoutLang === "/") return true;
+    if (CURATED_PILLAR_PATHS.includes(pathWithoutLang) || seoPages[pathWithoutLang]) return true;
+    if (["/about-us", "/contact", "/privacy-policy", "/terms-of-service", "/blog"].includes(pathWithoutLang)) return true;
+    if ([
+      "/gaming-naming-hub",
+      "/social-media-naming-hub",
+      "/business-brand-naming-hub",
+      "/creative-fantasy-naming-hub",
+      "/privacy-security-naming-hub"
+    ].includes(pathWithoutLang)) return true;
+    if (pathWithoutLang.startsWith("/blog")) {
+      const parts = pathWithoutLang.split("/").filter(Boolean);
+      if (parts.length === 1) return true;
+      if (parts.length === 3 && parts[1] === "category") {
+        return BLOG_CATEGORIES.some(c => c.id === parts[2]);
+      }
+      if (parts.length === 3 && parts[1] === "tag") {
+        return true;
+      }
+      if (parts.length === 3 && parts[1] === "author") {
+        return !!BLOG_AUTHORS[parts[2]];
+      }
+      if (parts.length === 2) {
+        return !!getArticleBySlug(parts[1]);
+      }
+      return false;
+    }
+    return false;
+  };
 
   // Check if current request path is one of our SEO pages or blog paths
   const getSeoMetadata = (urlPath: string) => {
@@ -419,6 +501,16 @@ Sitemap: ${protocol}://${host}/sitemap.xml`);
       app.use(vite.middlewares);
 
       app.get("*", async (req, res, next) => {
+        const redirectTarget = getRedirectTarget(req.originalUrl);
+        if (redirectTarget) {
+          res.redirect(301, redirectTarget);
+          return;
+        }
+        if (!isValidRoute(req.originalUrl)) {
+          res.status(404).send("404 Not Found");
+          return;
+        }
+
         const url = req.originalUrl;
         const protocol = req.headers["x-forwarded-proto"] || req.protocol || "https";
         const host = req.get("host");
@@ -468,6 +560,16 @@ Sitemap: ${protocol}://${host}/sitemap.xml`);
     }));
 
     app.get("*", (req, res) => {
+      const redirectTarget = getRedirectTarget(req.originalUrl);
+      if (redirectTarget) {
+        res.redirect(301, redirectTarget);
+        return;
+      }
+      if (!isValidRoute(req.originalUrl)) {
+        res.status(404).send("404 Not Found");
+        return;
+      }
+
       const url = req.originalUrl;
       const protocol = req.headers["x-forwarded-proto"] || req.protocol || "https";
       const host = req.get("host");
